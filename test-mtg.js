@@ -1,41 +1,44 @@
-const app = document.getElementById('root');
+var creatureCard = document.getElementById('creature-card');
+var btn = document.getElementById('btn');
 
-const logo = document.createElement('img');
-logo.src = 'logo.png';
+btn.addEventListener('click', function() {
+    var requestBtn = new XMLHttpRequest();
+    requestBtn.open('GET','https://api.magicthegathering.io/v1/cards');
+    requestBtn.onload = function() {
+        var cardData = JSON.parse(requestBtn.responseText);
+        renderHTML(cardData);
+        console.log(cardData);
+    };
+    requestBtn.send();
+});
 
-const container = document.createElement('div');
-container.setAttribute('class', 'container');
+function renderHTML(data) {
+    var htmlString = 'names';
 
-app.appendChild(logo);
-app.appendChild(container);
-
-var request = new XMLHttpRequest();
-request.open('GET', 'https://ghibliapi.herokuapp.com/films', true);
-request.onload = function () {
-
-  // Begin accessing JSON data here
-  var data = JSON.parse(this.response);
-  if (request.status >= 200 && request.status < 400) {
-    data.forEach(movie => {
-      const card = document.createElement('div');
-      card.setAttribute('class', 'card');
-
-      const h1 = document.createElement('h1');
-      h1.textContent = movie.title;
-
-      const p = document.createElement('p');
-      movie.description = movie.description.substring(0, 300);
-      p.textContent = `${movie.description}...`;
-
-      container.appendChild(card);
-      card.appendChild(h1);
-      card.appendChild(p);
-    });
-  } else {
-    const errorMessage = document.createElement('marquee');
-    errorMessage.textContent = `Gah, it's not working!`;
-    app.appendChild(errorMessage);
-  }
+    for (i = 0; i < data.length; i++) {
+        htmlString += '<p>' + data[i].name + ' is a ' + data[i].type + '</p>';
+    }
 }
+    creatureCard.insertAdjacentHTML('beforeend', htmlString);
 
-request.send();
+
+var mtg = require('mtgsdk');
+
+// Get all cards
+mtg.card.all()
+    .on('data', function (cards) {
+        console.log(cards.name)
+    });
+
+// Filter Cards
+mtg.card.all({ supertypes: 'legendary', types: 'creature', colors: 'red,white' })
+    .on('data', function (card) {
+        console.log(card.name)
+    });
+
+// Get cards on a specific page / pageSize
+/*
+mtg.card.where({ page: 50, pageSize: 50})
+    .then(cards => {
+    console.log(cards[0].name)
+})*/
