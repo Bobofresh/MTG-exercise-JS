@@ -1,46 +1,19 @@
-<!doctype html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Ghibli App</title>
-    <link href="https://api.magicthegathering.io/v1/cards" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <meta charset="UTF-8" content="width=device-width, initial-scale=1" />
+    <title>MTG API Exercise</title>
+    <!-- <link rel="stylesheet" href="css/styles.css"> -->
 </head>
-
 <body>
 
-<script>
-const mtg = require('mtgsdk');
+<header>
+    <h1>Magic the Gathering Creature Cards</h1>
+    <button id="btn">Fetch Creature and Info</button>
+</header>
+<!-- only display cards that are (1) of type “creature” and (2) include an image -->
+<div id="creature-card"></div>
 
-// Get all cards
-mtg.card.all()
-.on('data', function (card) {
-  console.log(card.name)
-});
-
-// Filter Cards
-mtg.card.all({ supertypes: 'legendary', types: 'creature', colors: 'red,white' })
-.on('data', function (card) {
-    console.log(card.name)
-});
-
-// Get cards on a specific page / pageSize
-mtg.card.where({ page: 50, pageSize: 50})
-.then(cards => {
-    console.log(cards[0].name)
-})
-      
-// partial name match
-mtg.card.where({name: '"Archangel Avacyn"'})
-.then(results => {
-    console.log(results)
-})
-
-// exact name match
-mtg.card.where({name: '"Archangel Avacyn"'})
-.then(results => {
-    console.log(results)
-})
-    </script>
+<script src="mtg-test1.js"></script>
 </body>
-
 </html>
